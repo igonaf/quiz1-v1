@@ -2,6 +2,8 @@
 
 use Exceptions\ClassNotFoundException;
 use Exceptions\InvalidPostKeyException;
+use Model\BlogPost;
+use Model\NewsPost;
 
 /**
  * class PostCreator
@@ -40,17 +42,15 @@ class PostCreator {
      * @param array $data 
      */
     public function make(string $post_type, array $data) {
-        if (!class_exists($post_type)) {
-            throw new ClassNotFoundException('I did not find the class ' . $post_type);
+        if (!isset($this->_conf[$post_type])) {
+            throw new InvalidPostKeyException('The key for class in config was incorrect');
         }
 
-        foreach ($this->_conf as $key => $value) {
-            if ($key == $post_type) {
-                return new $key($data);
-            }
+        if (class_exists($this->_conf[$post_type])) {
+            return new $this->_conf[$post_type]($data);
+        } else {
+            throw new ClassNotFoundException('I did not find the class ' . $this->_conf[$post_type]);
         }
-
-        throw new InvalidPostKeyException('The key(s) for class in config was(were) incorrect');
     }
 
     /**
