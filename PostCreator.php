@@ -28,7 +28,7 @@ class PostCreator {
      * Get single instance of current class
      */
     public static function getInstance() {
-        if (NULL === self::$_instance) {
+        if (is_null (self::$_instance) ) {
             self::$_instance = new self();
         }
 
@@ -58,7 +58,7 @@ class PostCreator {
      * Get data from config
      */
     private function __construct() {
-        $this->_conf = require_once self::CONFIG_FILE;
+        $this->_conf = require self::CONFIG_FILE;
     }
 
     /**
